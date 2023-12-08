@@ -24,5 +24,5 @@ export interface Props {
   like: number;
   comments: Array<object>;
   isClickInput: boolean;
-  setIsDelete: boolean;
+  setIsDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }

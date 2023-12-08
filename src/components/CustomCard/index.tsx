@@ -30,7 +30,8 @@ function CustomCard(props:Props) {
     },
   ];
   const [isClickCardDetail,setIsClickCardDetail] = useState(false);
-  const {setCardId,cards,cardId} = CardState();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const {setCardId,cards}:any = CardState();
   const [,setLikeNumber] = useState(0);
   const [isChangeOneSecond,setIsChangeOneSecond] = useState(false);
   const [isClickHeart,setIsClickHeart] = useState(false);
@@ -94,13 +95,23 @@ function CustomCard(props:Props) {
       >
         <a onClick={(e) => {e.stopPropagation();}}>
           <Space>
-            <img src={moreIcon} alt="more-icon" style={isClickMoreIcon===true?{background:"#F3F3F3",borderRadius:"4px"}:{}} onClick={(e) => setIsClickMoreIcon(true)}/>
+            <img src={moreIcon} alt="more-icon" style={isClickMoreIcon===true?{background:"#F3F3F3",borderRadius:"4px"}:{}} onClick={() => setIsClickMoreIcon(true)}/>
           </Space>
         </a>
       </Dropdown>
     </div>
     </Card>
-    {isDelete===false&&<CardDetail setIsModalEditOpen={setIsModalEditOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} setIsForceRender={setIsForceRender} id={id} name={name} description={description} imgUrl={imgUrl} like={like} comments={comments} isClickCardDetail={isClickCardDetail} setIsClickCardDetail={setIsClickCardDetail}/>}
+    {isDelete===false&&<CardDetail setIsModalEditOpen={setIsModalEditOpen} setIsModalDeleteOpen={setIsModalDeleteOpen} setIsForceRender={setIsForceRender} id={id} name={name} description={description} imgUrl={imgUrl} like={like} comments={comments} isClickCardDetail={isClickCardDetail} setIsClickCardDetail={setIsClickCardDetail} isModalAddOpen={false} setIsModalAddOpen={function (): void {
+        throw new Error("Function not implemented.");
+      } } isModalDeleteOpen={false} setIsCurrentPageChange={function (): void {
+        throw new Error("Function not implemented.");
+      } } setCurrentPage={function (): void {
+        throw new Error("Function not implemented.");
+      } } formatCompactNumber={function (): string {
+        throw new Error("Function not implemented.");
+      } } isCurrentPageChange={false} itemPerPage={0} currentPage={0} isChangeInput={false} isDelete={false} searchInputValue={""} isModalEditOpen={false} isClickInput={false} setIsDelete={function (): void {
+        throw new Error("Function not implemented.");
+      } }/>}
     </>
   );
 }

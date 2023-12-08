@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-const CardContext = createContext();
+const CardContext = createContext({});
 
 function CardProvider({ children }: { children: React.ReactNode }) {
   const initCards = [

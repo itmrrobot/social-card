@@ -3,8 +3,11 @@ import closeIcon from "../../assets/imgs/close-line.svg";
 import { CardState } from "../../context/Cards";
 import { Props } from "../../interface";
 
+
+
 function SearchDropdown(props:Props) {
-  const { searchHistory ,setSearchHistory,setCardSearchValue }  = CardState();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { searchHistory ,setSearchHistory,setCardSearchValue }:any  = CardState();
   const {isClickInput,isChangeInput,searchInputValue} = props;
   const lastFiveSearch = searchHistory.length>=5 ? searchHistory.slice(searchHistory.length-5,searchHistory.length):searchHistory;
   const exists = searchHistory?.filter((s: string) => s===searchInputValue||s.toLowerCase().includes(searchInputValue?.toLowerCase()));

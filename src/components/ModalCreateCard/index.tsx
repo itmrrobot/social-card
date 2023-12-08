@@ -20,13 +20,10 @@ function ModalCreateCard(props: Props) {
     setIsModalEditOpen,
   } = props;
   const [messageApi, contextHolder] = message.useMessage();
-  const [over, setOver] = useState(false);
-  const [imgSelected, setImgSelected] = useState({});
+  const [, setOver] = useState(false);
   const [imgOnCloudinary, setImgOnCloudinary] = useState("");
   const [name, setName] = useState("");  
   const [description, setDescription] = useState("");
-  const initail = {name:'',description:'',imgOnCloudinary:''};
-  const [formValue,setFormValue] = useState(initail);
   const inputNameElement = document.querySelector(
     "#form-input-name"
   ) as HTMLInputElement;
@@ -35,7 +32,8 @@ function ModalCreateCard(props: Props) {
   ) as HTMLTextAreaElement;
   const btnAddElement = document.querySelector(".btn-add");
   const [isCloseImgEdit, setIsCloseImgEdit] = useState(false);
-  const { cards, setCards, cardId, setCardId } = CardState();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { cards, setCards, cardId }:any = CardState();
   const items = cards;
   const itemId = Math.max(...items.map((o: { id: number }) => o.id)) || 0;
   const card = {
@@ -135,7 +133,7 @@ function ModalCreateCard(props: Props) {
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
     formData.append("upload_preset", "tpmzgyak");
-    const imageReg = /[\/.](png|jpg|jpeg|svg)$/i;
+    const imageReg = /[\\/.](png|jpg|jpeg|svg)$/i;
     const string = e.target.files[0].type;
     const card = cards.filter((c: { id: number; }) => c.id === cardId);
     if (sizeInMB > 5 && imageReg.test(string) === false) {

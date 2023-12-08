@@ -18,7 +18,6 @@ function CardDetail(props: Props) {
     description,
     imgUrl,
     comments,
-    setIsForceRender,
     setIsModalDeleteOpen,
     setIsModalEditOpen,
   } = props;
@@ -58,11 +57,11 @@ function CardDetail(props: Props) {
   const [commentName, setCommentName] = useState("");
   const [commentDescription, setCommentDescription] = useState("");
   const [isChecked, setIsChecked] = useState(false);
-  const { cards, setCards, setCardId } = CardState();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { cards, setCards, setCardId }:any = CardState();
   const cardFilterById = cards?.filter((c: { id: number }) => c.id === id);
   const [moreNumber, setMoreNumber] = useState(0);
   const [isClick, setIsClick] = useState(false);
-  const [moreComments, setMoreComments] = useState();
   const [isChangeOneSecond,setIsChangeOneSecond] = useState(false);
   const [isClickHeart,setIsClickHeart] = useState(false);
   const [,setLikeNumber] = useState(0);
@@ -134,7 +133,7 @@ function CardDetail(props: Props) {
   };
   const timeSince = (date: Date) => {
     const now = new Date();
-    const diff = now - date;
+    const diff = now.valueOf() - date.valueOf();
     const hours = Math.floor(diff / (1000 * 60 * 60));
     if (hours > 24) {
       const day = date.getDate();
@@ -204,7 +203,7 @@ function CardDetail(props: Props) {
           <span className="comment-number">({comments.length})</span>
         </div>
         <div className="comments-list">
-          {lastestFiveComments.reverse().map((comment, index) => {
+          {lastestFiveComments.reverse().map((comment:{name:string,content:string,time:string}, index:number) => {
             return (
               <div className="comment-item" key={index}>
                 <div className="comment-name">{comment.name}</div>
@@ -239,7 +238,7 @@ function CardDetail(props: Props) {
             <input
               type="checkbox"
               className="checkbox"
-              onClick={(e) => {
+              onClick={() => {
                 setIsChecked(!isChecked);
                 isChecked === false
                   ? setCommentName("unknown")
@@ -310,7 +309,7 @@ function CardDetail(props: Props) {
         >
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              <img src={moreIcon} alt="more-icon" style={isClickMoreIcon===true?{background:"#F3F3F3",borderRadius:"4px"}:{}} onClick={(e) => setIsClickMoreIcon(true)}/>
+              <img src={moreIcon} alt="more-icon" style={isClickMoreIcon===true?{background:"#F3F3F3",borderRadius:"4px"}:{}} onClick={() => setIsClickMoreIcon(true)}/>
             </Space>
           </a>
         </Dropdown>

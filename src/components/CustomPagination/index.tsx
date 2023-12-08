@@ -3,12 +3,13 @@ import "./CustomPagination.scss";
 import arrowRightIcon from "../../assets/imgs/arrow-right.svg";
 import arrowLeftIcon from "../../assets/imgs/arrow-left.svg";
 import { CardState } from "../../context/Cards";
-import { useState } from "react";
+import {  useState } from "react";
 import { Props } from "../../interface";
 
 const pageSize = 10;
 function CustomPagination(props:Props) {
-  const {cards} = CardState();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const {cards}:any   = CardState();
   const {setCurrentPage,currentPage,itemPerPage,setIsCurrentPageChange,isCurrentPageChange} = props
   const [page,setPage] = useState(currentPage);
   const itemRender: PaginationProps["itemRender"] = (
