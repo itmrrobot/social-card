@@ -1,0 +1,76 @@
+.ant-card-bordered {
+  border: 1px solid var(--third-color);
+  margin-bottom: 16px;
+}
+
+.card {
+  cursor: pointer;
+  .item-title {
+    overflow: hidden;
+    color: var(--fifth-color);
+    text-overflow: ellipsis;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
+    line-height: 26px; /* 130% */
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  .item-img {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+.card-content {
+  padding-bottom: 16px;
+  border-bottom: 0.5px solid var(--third-color);
+  .card-wrap {
+    padding: 8px 0;
+    gap: 8px;
+  }
+}
+
+.btn-delete {
+  padding: 12px 16px;
+  width: 162px;
+  text-align: left;
+  color: var(--fifth-color);
+font-family: Inter;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: 20px; /* 125% */
+border: none;
+background-color: transparent;
+}
+
+.more-icon {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+}
+
+@media (max-width:739px) {
+  .card {
+    .item-img {
+      width: 94px;
+      height: 94px;
+  }
+  }
+  .card-content {
+    .card-wrap {
+      padding: 0;
+      gap: 4px;
+  }
+  }
+  .ant-col-12 {
+    max-width: 100%;
+  }
+  .wrap-react {
+    margin-top: 12px;
+  }
+}

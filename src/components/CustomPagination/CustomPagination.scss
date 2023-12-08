@@ -1,0 +1,108 @@
+.wrap-pagination {
+  display: flex;
+  justify-content: right;
+  margin-top: 15px;
+}
+
+.ant-pagination {
+  .ant-pagination-options {
+    display: none;
+  }
+  .ant-pagination-item {
+    height: auto;
+    margin-inline-end: 4px;
+    color: var(--second-color);
+    padding: 12px 18px;
+    border-color: transparent;
+    line-height: normal;
+    color: var(--fifth-color);
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }
+  .ant-pagination-item a {
+    padding: 0;
+  }
+  .ant-pagination-item-active {
+    color: var(--second-color);
+    padding: 12px 18px;
+    background-color: var(--first-color);
+    border-color: transparent;
+    line-height: normal;
+  }
+  .ant-pagination-item-active a {
+    padding: 0;
+    color: var(--second-color);
+    background-color: var(--first-color);
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }
+  .ant-pagination-prev,
+  .ant-pagination-jump-prev {
+    margin-inline-end: 12px;
+  }
+  .ant-pagination-jump-next,
+  .ant-pagination-next {
+    margin-inline-start: 8px;
+  }
+  .ant-pagination-prev,
+  .ant-pagination-next {
+    color: var(--sixth-color);
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+  }
+}
+
+:where(.css-dev-only-do-not-override-zcfrx9) a {
+  color: var(--first-color);
+}
+
+:where(.css-dev-only-do-not-override-zcfrx9) a[disabled] {
+  color: var(--sixth-color);
+}
+
+:where(.css-dev-only-do-not-override-zcfrx9) a[disabled] > img {
+  filter: invert(67%) sepia(2%) saturate(6%) hue-rotate(326deg) brightness(92%)
+    contrast(96%);
+}
+
+.next,
+.prev {
+  display: flex;
+  gap: 8px;
+}
+
+.pagination-page {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: 237px;
+  .pagination-text {
+    color: var(--fifth-color);
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px; /* 125% */
+  }
+  .pagination-input {
+    width: 77px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--third-color);
+    background: var(--seventeenth-color);
+  }
+  .pagination-total-page {
+    color: var(--fifth-color);
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px; /* 125% */
+  }
+}

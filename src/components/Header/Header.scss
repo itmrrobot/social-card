@@ -1,0 +1,128 @@
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-img {
+  margin: 32px auto;
+}
+
+.header-wrap {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 32px;
+}
+
+.btn-create {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--first-color);
+  border: none;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  color: var(--second-color);
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 125% */
+  cursor: pointer;
+  .add-icon {
+    margin-left: 45px;
+  }
+  .add-text {
+    margin-right: 45px;
+  }
+}
+
+.group {
+  display: flex;
+  gap: 8px;
+  position: relative;
+  .search-input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--third-color);
+    width: 366px;
+    line-height: normal;
+    color: var(--fifth-color);
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+  }
+  .search-input::placeholder {
+    color: var(--fourth-color);
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 125% */
+  }
+  .btn-search {
+    background: var(--first-color);
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    height: auto;
+    cursor: pointer;
+    width: auto;
+  }
+}
+
+.hide-on-pc {
+  display: none;
+}
+
+@media (max-width: 738px) {
+  .hide-on-moble {
+    display: none;
+  }
+  .diplay-on-moble {
+    display: block;
+  }
+  .header-wrap {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+    padding: 0;
+    gap: 24px;
+  }
+  .wrap-logo-btn {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0.5px;
+    align-items: center;
+  }
+  .btn-create {
+    padding: 12px;
+    .add-icon {
+      margin: 0;
+    }
+  }
+  .group {
+    border: 1px solid var(--third-color);
+    border-radius: 8px;
+    padding: 12px;
+    background-color: var(--seventeenth-color);
+    .search-input {
+      border: none;
+      padding: 0;
+      color: var(--fourth-color);
+      font-family: Inter;
+      font-size: 16px;
+      line-height: 20px; /* 125% */
+      outline: none;
+    }
+    
+  }
+  .ant-input:focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+input:focus {
+  outline: none;
+}

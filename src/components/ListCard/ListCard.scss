@@ -1,0 +1,59 @@
+.wrap-react {
+  display: flex;
+  margin-top: 16px;
+  justify-content: flex-end;
+  gap: 24px;
+  .wrap-react-like,
+  .wrap-react-chat {
+    display: flex;
+    gap: 8px;
+    .react-like-number,
+    .react-chat-number {
+      color: var(--fifth-color);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: normal;
+    }
+  }
+}
+
+.model-delete-title {
+  margin-bottom: 16px;
+  color: var(--fifth-color);
+  font-family: Inter;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 40px; /* 125% */
+  display: block;
+  text-align: center;
+}
+
+.model-delete-desc {
+  text-align: center;
+  display: block;
+  color: var(--fifth-color);
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 125% */
+}
+
+.more-icon {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  cursor: pointer;
+}
+
+.ant-modal {
+  .ant-btn + .ant-btn:not(.ant-dropdown-trigger) {
+    background: var(--nineth-color) !important;
+    color: var(--second-color) !important;
+  }
+}
+
+@media (max-width:738px) {
+  
+}
