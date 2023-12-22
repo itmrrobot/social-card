@@ -4,7 +4,7 @@ import logo from "../../assets/imgs/logo.svg";
 import addIcon from "../../assets/imgs/add-line.svg";
 import searchIcon from "../../assets/imgs/search-line.svg";
 import { Button } from "antd";
-import  {   useState } from "react";
+import  {   ChangeEvent, useState } from "react";
 import { Props } from "../../interface";
 import { CardState } from "../../context/Cards";
 import SearchDropdown from "../SearchDropdown";
@@ -14,7 +14,7 @@ import searchBlackIcon from "../../assets/imgs/search-line-black.svg";
 function Header(props:Props) {
   //const [isModalAddOpen, setIsModalAddOpen] = useState(false);
   const {setIsForceRender,setIsModalAddOpen} = props;
-  const {setCardSearchValue,searchHistory,setIsSearchEmpty,setIsSearchMatch,isSearchMatch}:any= CardState();
+  const {setCardSearchValue,cardSearchValue,searchHistory,setIsSearchEmpty,setIsSearchMatch,isSearchMatch}:any= CardState();
   const [isClickInput,setIsCliclInput] = useState(false);
   const [isChangeInput,setIsChangeInput] = useState(false);
   const [searchInputValue,setSearchInputValue] = useState("");
@@ -34,15 +34,14 @@ function Header(props:Props) {
   const handleSearch = (e) => {
     if(e.which===13) {
       setCardSearchValue(e.target.value);
+      setIsSearchEmpty(false)
       const divElement = document.createElement("div");
         divElement.classList.add("container");
       if(e.target.value.length<=50&&e.target.value.trim()!=="") {
-        searchHistory?.push(e.target.value);
-        const reverse = searchHistory?.reverse();
-        localStorage.setItem("searchs",JSON.stringify(reverse));
+        searchHistory?.unshift(e.target.value);
+        localStorage.setItem("searchs",JSON.stringify(searchHistory));
         setIsCliclInput(false);
-        setIsSearchEmpty(false)
-        //setIsForceRender(true);
+        setIsSearchEmpty(true)
         setIsChangeInput(false);
       } 
       if(notFoundElement===null) {
@@ -50,6 +49,8 @@ function Header(props:Props) {
       } else {
         setIsSearchMatch(true)
       }
+      
+    console.log("Search .................")
     }
   }
 
@@ -60,72 +61,48 @@ function Header(props:Props) {
 
   const handleSearchByClick = () => {
     setCardSearchValue(inputElement?.value);
+    if(cardSearchValue === undefined) {
+      setCardSearchValue("");
+      setIsForceRender(true);
+    }
     if(inputElement?.value.length<=50&&inputElement?.value.trim()!=="") {
-      searchHistory?.push(inputElement.value);
-      const reverse = searchHistory?.reverse();
-      localStorage.setItem("searchs",JSON.stringify(reverse));
+      searchHistory?.unshift(inputElement.value);
+      localStorage.setItem("searchs",JSON.stringify(searchHistory));
       setIsCliclInput(false);
       setIsChangeInput(false);
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[0-9]/g, "");
-    e.target.value = e.target.value.replace(/[^a-zA-Z]/g, '').substr(0,50);
+    e.target.value = e.target.value.replace(/^\s/, "");
+    e.target.value= e.target.value.replace(/[$&+,:;=?[\]@#|{}'<>.^*()%!-/`~]/,'');
+    e.target.value=e.target.value.replace(/\p{Emoji}/u,'');
     setSearchInputValue(e.target.value);
     setIsCliclInput(false);
     setIsChangeInput(true);
   }
 
-  const HeaderOnMoble = () => {
-    return (
-      <div className="hide-on-pc diplay-on-moble">
-        <div className="header-wrap">
-          <div className="wrap-logo-btn">
+  return (
+    <div className="header">
+      <div>
+
+      <img src={logo} alt="logo" className="logo-img hide-on-moble" />
+      <div className="header-wrap">
+        <button className="btn-create hide-on-moble" onClick={showModal}>
+          <img src={addIcon} alt="add-icon" className="add-icon" />
+          <span className="add-text">Create new card</span>
+        </button>
+        <div className="wrap-logo-btn hide-on-pc diplay-on-moble">
           <img src={logoOnMoble} alt="logo" className="logo-on-moble" />
           <button className="btn-create" onClick={showModal}>
           <img src={addIcon} alt="add-icon" className="add-icon" />
           </button>
           </div>
-          <div className="group">
-          <img src={searchBlackIcon} alt="search-icon" />
-          <input type="text" placeholder="Search.." name="searchValue" className="search-input" onKeyDown={handleSearch} onClick={handleClick} onChange={handleChange}/>
-          <SearchDropdown isChangeInput={isChangeInput} searchInputValue={searchInputValue} isClickInput={isClickInput} setIsForceRender={setIsForceRender} isModalAddOpen={false} setIsModalAddOpen={function (): void {
-              throw new Error("Function not implemented.");
-            } } isModalDeleteOpen={false} setIsModalDeleteOpen={function (): void {
-              throw new Error("Function not implemented.");
-            } } setIsClickCardDetail={function (): void {
-              throw new Error("Function not implemented.");
-            } } setIsModalEditOpen={function (): void {
-              throw new Error("Function not implemented.");
-            } } setIsCurrentPageChange={function (): void {
-              throw new Error("Function not implemented.");
-            } } setCurrentPage={function (): void {
-              throw new Error("Function not implemented.");
-            } } formatCompactNumber={function (): string {
-              throw new Error("Function not implemented.");
-            } } isCurrentPageChange={false} itemPerPage={0} currentPage={0} isDelete={false} isClickCardDetail={false} isModalEditOpen={false} id={0} name={""} description={""} imgUrl={""} like={0} comments={[]} setIsDelete={function (): void {
-              throw new Error("Function not implemented.");
-            } }/>
-        </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="header">
-      <div className="hide-on-moble">
-
-      <img src={logo} alt="logo" className="logo-img" />
-      <div className="header-wrap">
-        <button className="btn-create" onClick={showModal}>
-          <img src={addIcon} alt="add-icon" className="add-icon" />
-          <span className="add-text">Create new card</span>
-        </button>
         <div className="group">
+          <img src={searchBlackIcon} alt="search-icon" className="hide-on-pc diplay-on-moble"/>
           <input type="text" placeholder="Search.." name="searchValue" className="search-input" onKeyDown={handleSearch} onClick={handleClick} onChange={handleChange}/>
-          <Button className="btn-search" onClick={handleSearchByClick}>
+          <Button className="btn-search hide-on-moble" onClick={handleSearchByClick}>
             <img src={searchIcon} alt="search-icon" />
           </Button>
           <SearchDropdown isChangeInput={isChangeInput} searchInputValue={searchInputValue} isClickInput={isClickInput} setIsForceRender={setIsForceRender} isModalAddOpen={false} setIsModalAddOpen={function (): void {
@@ -148,7 +125,6 @@ function Header(props:Props) {
         </div>
       </div>
       </div>
-      <HeaderOnMoble/>
     </div>
   );
 }

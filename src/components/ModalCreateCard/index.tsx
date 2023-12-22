@@ -1,7 +1,7 @@
 import { Modal, Tooltip, Typography, message } from "antd";
 import uploadIcon from "../../assets/imgs/image-add.svg";
 import errorIcon from "../../assets/imgs/error-warning-line.svg";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Props } from "../../interface";
 import axios from "axios";
 import closeIcon from "../../assets/imgs/close-fill.svg";
@@ -24,6 +24,9 @@ function ModalCreateCard(props: Props) {
   const [imgOnCloudinary, setImgOnCloudinary] = useState("");
   const [name, setName] = useState("");  
   const [description, setDescription] = useState("");
+  const [inputValueNameEdit, setInputValueNameEdit] = useState('')
+  const [inputValueDescEdit, setInputValueDescEdit] = useState('')
+  const [isClickEdit,setIsClickEdit] = useState(false);
   const inputNameElement = document.querySelector(
     "#form-input-name"
   ) as HTMLInputElement;
@@ -44,29 +47,32 @@ function ModalCreateCard(props: Props) {
     comments: [],
     like: 0,
   };
-  const newCard = cards.filter((c: { id: number; }) => c.id === cardId);
-  if (name.length > 50) {
+  const newCard = items.filter((c: { id: number; }) => c.id === cardId);
+  console.log(cards,cardId);
+  if (name.length > 50 || inputValueNameEdit.length>50) {
     inputNameElement?.classList.add("input-invalid");
   } else {
     inputNameElement?.classList.remove("input-invalid");
   }
-  if (description.length > 200) {
+  if (description.length > 200||inputValueDescEdit.length>200) {
     areaElement?.classList.add("input-invalid");
   } else {
     areaElement?.classList.remove("input-invalid");
   }
-  if (
-    name.length > 0 &&
-    name.length <= 50 &&
-    description.length <= 200 &&
-    description.length > 0 &&
-    name.trim() !== "" &&
-    description.trim() !== "" &&
-    imgOnCloudinary !== ""
-  ) {
-    btnAddElement?.classList.add("active");
-  } else {
-    btnAddElement?.classList.remove("active");
+  if(isModalAddOpen) {
+    if (
+      name.length > 0 &&
+      name.length <= 50 &&
+      description.length <= 200 &&
+      description.length > 0 &&
+      name.trim() !== "" &&
+      description.trim() !== "" &&
+      imgOnCloudinary !== ""
+    ) {
+      btnAddElement?.classList.add("active");
+    } else {
+      btnAddElement?.classList.remove("active");
+    }
   }
   if (isModalEditOpen) {
     if (
@@ -83,9 +89,11 @@ function ModalCreateCard(props: Props) {
       btnAddElement?.classList.add("active");
     }
   }
-
-  const handleInputName = (e) => {
+  const handleInputName = (e:ChangeEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[0-9]/g, "");
+    e.target.value = e.target.value.replace(/^\s/, "");
+    e.target.value= e.target.value.replace(/[$&+,:;=?[\]@#|{}'<>.^*()%!-/`~]/,'');
+    e.target.value=e.target.value.replace(/\p{Emoji}/u,'');
     e.target.value=e.target.value.replace(/(\b)([a-zA-Z])/,
                    function(firstLetter: string){
                       return   firstLetter.toUpperCase();
@@ -93,8 +101,32 @@ function ModalCreateCard(props: Props) {
     setName(e.target.value);
     console.log(e.target.value);
   };
-  const handleInputDescription = (e) => {
+
+  const handleInputNameEdit = (e:ChangeEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.replace(/[0-9]/g, "");
     e.target.value = e.target.value.replace(/^\s/, "");
+    e.target.value= e.target.value.replace(/[$&+,:;=?[\]@#|{}'<>.^*()%!-/`~]/,'');
+    e.target.value=e.target.value.replace(/\p{Emoji}/u,'');
+    e.target.value=e.target.value.replace(/(\b)([a-zA-Z])/,
+                   function(firstLetter: string){
+                      return   firstLetter.toUpperCase();
+                   });
+      
+        setInputValueNameEdit(e.target.value);
+        newCard[0].name=e.target.value;
+      
+  }
+  console.log(newCard[0].name);
+  const handleInputDescriptionEdit = (e:ChangeEvent<HTMLTextAreaElement>) => {
+    setInputValueDescEdit(e.target.value);
+    e.target.value=e.target.value.replace(/(\b)([a-zA-Z])/,
+                   function(firstLetter: string){
+                      return   firstLetter.toUpperCase();
+                   });
+    newCard[0].description=e.target.value;
+  }
+
+  const handleInputDescription = (e) => {
     e.target.value=e.target.value.replace(/(\b)([a-zA-Z])/,
                    function(firstLetter: string){
                       return   firstLetter.toUpperCase();
@@ -109,26 +141,40 @@ function ModalCreateCard(props: Props) {
     const areaElement = document.querySelector(
       "#form-area"
     ) as HTMLTextAreaElement;
-    const card = cards.filter((c: { id: number; }) => c.id === cardId);
+    const cardStore = JSON.parse(localStorage.getItem("cards"));
+    const card = cardStore?.filter(c => c.id===cardId);
     if (isModalAddOpen) {
       setIsModalAddOpen(false);
       inputNameElement.value = "";
       areaElement.value = "";
       setName("");
       setDescription("");
-    } else {
-      inputNameElement.defaultValue = card[0].name;
-      areaElement.defaultValue = card[0].description;
-      setName(card[0].name);
-      setDescription(card[0].description);
+      setImgOnCloudinary("");
+    } 
+    if(isModalEditOpen) {
+      if(inputValueDescEdit==="") {
+        newCard[0].description=card[0].description;
+        setInputValueDescEdit(card[0].description);
+      }
+      if(inputValueNameEdit==="") {
+        newCard[0].name=card[0].name;
+        setInputValueNameEdit(card[0].name);
+      }
+      if(isClickEdit===false) {
+        newCard[0].name=card[0].name;
+        newCard[0].description=card[0].description;
+        newCard[0].imgUrl=card[0].imgUrl;
+        setIsCloseImgEdit(false);
+      }
       setIsModalEditOpen(false);
     }
-    setImgOnCloudinary("");
+    
   };
+  console.log(inputValueNameEdit,inputValueDescEdit);
   const handleUpload = async (e) => {
     if (!e.target.files) return;
     const sizeInMB = Number(
-      (e.target.files[0].size / (1024 * 1024)).toFixed(2)
+      (e.target.files[0].size / (1024*1024))
     );
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
@@ -136,7 +182,7 @@ function ModalCreateCard(props: Props) {
     const imageReg = /[\\/.](png|jpg|jpeg|svg)$/i;
     const string = e.target.files[0].type;
     const card = cards.filter((c: { id: number; }) => c.id === cardId);
-    if (sizeInMB > 5 && imageReg.test(string) === false) {
+    if (sizeInMB > 5) {
       messageApi.open({
         type: "warning",
         content: "This file is too large",
@@ -145,7 +191,8 @@ function ModalCreateCard(props: Props) {
         },
         icon: <img src={errorIcon} alt="error-warning-icon" />,
       });
-    } else {
+    } 
+    if(sizeInMB <= 5 && imageReg.test(string) === true) {
       try {
         const res = await axios.post(
           "https://api.cloudinary.com/v1_1/dzznxekfg/image/upload",
@@ -172,8 +219,8 @@ function ModalCreateCard(props: Props) {
   const handleRemoveImg = () => {
     setImgOnCloudinary("");
     if (isModalEditOpen) {
+      newCard[0].imgUrl="";
       setIsCloseImgEdit(true);
-      setIsForceRender(true);
     }
   };
   const handleCreate = () => {
@@ -213,28 +260,18 @@ function ModalCreateCard(props: Props) {
     console.log(cards);
   };
   const handleEdit = () => {
-    console.log(name,description);
+    setInputValueDescEdit(areaElement.value);
+    setInputValueNameEdit(inputNameElement.value);
     const condition =
-      name.trim() === "" ||
-      description.trim() === "" ||
-      name.length > 50 ||
-      description.length > 200 ||
-      name.length === 0 ||
+      inputValueNameEdit.trim() === "" ||
+      inputValueDescEdit.trim() === "" ||
+      inputValueNameEdit.length > 50 ||
+      inputValueDescEdit.length > 200 ||
+      inputValueNameEdit.length === 0 ||
       newCard[0].description.length === 0 ||
       newCard[0].imgUrl === "";
-      const card = cards.filter((c: { id: number; }) => c.id === cardId);
-      console.log(name,description)
+      //const card = cards.filter((c: { id: number; }) => c.id === cardId);
     if (!condition) {
-      if(name===""||description=="") {
-        setName(card[0].name);
-        setDescription(card[0].description);
-        newCard[0].name = card[0].name;
-      newCard[0].description = card[0].description;
-      } 
-      if(name!==""&&description!=="") {
-        newCard[0].name = name;
-        newCard[0].description = description;
-      }
       const newItems = items.map(
         (obj: { id: number }) =>
           newCard.find((o: { id: number }) => o.id === obj.id) || obj
@@ -242,11 +279,12 @@ function ModalCreateCard(props: Props) {
       localStorage.setItem("cards", JSON.stringify(newItems));
       setCards(newItems);
       setIsModalEditOpen(false);
-     // setIsForceRender(true);
-    } 
-    //setIsForceRender(true);
+      setIsClickEdit(true);
+      //setIsForceRender(true);
+    }
   };
   return (
+    <>
     <Modal
       closeIcon={false}
       okText="Create"
@@ -309,7 +347,7 @@ function ModalCreateCard(props: Props) {
           </div>
         )
       )}
-      {isCloseImgEdit && isModalEditOpen ? (
+      {newCard[0]?.imgUrl==="" && isModalEditOpen ? (
         <div className="wrap-upload-img">
           <Tooltip
             placement="right"
@@ -362,7 +400,7 @@ function ModalCreateCard(props: Props) {
                 ? name.length
                 : name.length === 0
                 ? newCard[0]?.name?.length
-                : name.length}
+                : inputValueNameEdit.length}
               /50
             </span>
           </div>
@@ -372,8 +410,9 @@ function ModalCreateCard(props: Props) {
             placeholder="Enter your name"
             name="name"
             value={isModalAddOpen ? name : newCard[0]?.name}
-            onChange={handleInputName}
+            onChange={isModalAddOpen?handleInputName:handleInputNameEdit}
             id="form-input-name"
+            onPaste={(e) => e.preventDefault()}
           />
         </div>
         <div className="form-group">
@@ -394,7 +433,7 @@ function ModalCreateCard(props: Props) {
             className="form-input form-area"
             placeholder="Type description here"
             name="description"
-            onChange={handleInputDescription}
+            onChange={isModalAddOpen ?handleInputDescription:handleInputDescriptionEdit}
             id="form-area"
             value={
               isModalAddOpen ? description : newCard[0]?.description
@@ -417,6 +456,7 @@ function ModalCreateCard(props: Props) {
         </button>
       </div>
     </Modal>
+    </>
   );
 }
 

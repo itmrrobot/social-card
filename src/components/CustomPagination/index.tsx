@@ -12,6 +12,7 @@ function CustomPagination(props:Props) {
   const {cards}:any   = CardState();
   const {setCurrentPage,currentPage,itemPerPage,setIsCurrentPageChange,isCurrentPageChange} = props
   const [page,setPage] = useState(currentPage);
+  const inputElement = document.querySelector(".pagination-input") as HTMLInputElement;
   const itemRender: PaginationProps["itemRender"] = (
     _,
     type,
@@ -52,8 +53,10 @@ function CustomPagination(props:Props) {
     if(e.which===13) {
       if(e.target.value<=0) {
         setCurrentPage(1);
+        inputElement.value=String(1);
       } else if(e.target.value>Math.ceil(cards.length/itemPerPage)) {
-        setCurrentPage(Math.ceil(cards.length/itemPerPage));
+        //setCurrentPage(Math.ceil(cards.length/itemPerPage));
+        inputElement.value=String(Math.ceil(cards.length/itemPerPage));
       } else {
         setCurrentPage(Number(e.target.value));
       }
@@ -64,7 +67,7 @@ function CustomPagination(props:Props) {
       <Pagination current={currentPage} pageSize={pageSize} onChange={(page) => {setCurrentPage(page);setIsCurrentPageChange(true)}} showLessItems total={cards.length} itemRender={itemRender}/>
       <div className="pagination-page">
         <div className="pagination-text">Page</div>
-        <input type="number" className="pagination-input" onClick={handlePagination} onKeyDown={handlePressEnter} onChange={handleChange} name="input" value={isCurrentPageChange===true?currentPage:page}/>
+        <input type="number" defaultValue={1} className="pagination-input" onClick={handlePagination} onKeyDown={handlePressEnter} onChange={handleChange} name="input" value={isCurrentPageChange===true?currentPage:page}/>
         <div className="pagination-total-page">
           of {Math.ceil(cards.length/itemPerPage)}
         </div>

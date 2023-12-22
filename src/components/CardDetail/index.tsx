@@ -113,6 +113,7 @@ function CardDetail(props: Props) {
   }
   const handleCancel = () => {
     setIsClickCardDetail(false);
+    setIsChecked(false);
     setIsHidden(false);
   };
   if (commentName.length > 50) {
@@ -132,10 +133,10 @@ function CardDetail(props: Props) {
     });
   };
   const timeSince = (date: Date) => {
-    const now = new Date();
-    const diff = now.valueOf() - date.valueOf();
+    const now = Date.now();
+    const diff = (now - date.getTime());
     const hours = Math.floor(diff / (1000 * 60 * 60));
-    if (hours > 24) {
+    if (Math.abs(hours) > 24) {
       const day = date.getDate();
       const month = date.getMonth() + 1;
       const year = date.getFullYear();
@@ -144,6 +145,7 @@ function CardDetail(props: Props) {
     } else {
       return `${Math.abs(hours)} hour ago`;
     }
+  
   };
   const handleClickMore = () => {
     const remain = comments.length - moreNumber;
@@ -266,6 +268,8 @@ function CardDetail(props: Props) {
               placeholder="Your name"
               onChange={(e) => {
                 e.target.value = e.target.value.replace(/[0-9]/g, "");
+                e.target.value = e.target.value.replace(/^\s/, "");
+                e.target.value= e.target.value.replace(/[$&+,:;=?[\]@#|{}'<>.^*()%!-/`~]/,'');
                 e.target.value=e.target.value.replace(/(\b)([a-zA-Z])/,
                    function(firstLetter: string){
                       return   firstLetter.toUpperCase();
@@ -298,7 +302,7 @@ function CardDetail(props: Props) {
       )}
       <div className="wrap-back-dropdown">
         <div className="wrap-back hide-on-pc diplay-on-moble">
-          <img src={arrowBack} alt="" className="arrow-back" onClick={() => {setIsClickCardDetail(false);setIsHidden(false)}}/>
+          <img src={arrowBack} alt="" className="arrow-back" onClick={() => {setIsClickCardDetail(false);setIsHidden(false);setIsChecked(false)}}/>
           <span className="text">Details</span>
         </div>
         <Dropdown

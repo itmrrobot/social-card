@@ -78,7 +78,7 @@
 
 @media (max-width: 738px) {
   .hide-on-moble {
-    display: none;
+    display: none !important;
   }
   .diplay-on-moble {
     display: block;

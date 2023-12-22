@@ -2,7 +2,7 @@ import "./ListCard.scss";
 import CustomPagination from "../CustomPagination";
 import { Col, Modal, Row, Typography } from "antd";
 import CustomCard from "../CustomCard";
-import {   useState } from "react";
+import {   useEffect, useState } from "react";
 import { CardState } from "../../context/Cards";
 import NotFound from "../NotFound";
 import ModalCreateCard from "../ModalCreateCard";
@@ -14,19 +14,22 @@ function ListCard(props:Props) {
   const [isModalEditOpen,setIsModalEditOpen] = useState(false);
   const [isDelete,setIsDelete] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { cards , cardSearchValue,cardId,setCards,isSearchMatch }:any  = CardState();
+  const { cards , cardSearchValue,cardId,setCards,isSearchEmpty }:any  = CardState();
   const [currentPage,setCurrentPage] = useState(1);
   const [isCurrentPageChange,setIsCurrentPageChange] = useState(false);
-  const [itemPerPage] = useState(10);
+  const [itemPerPage,setItemPerPage] = useState(10);
   const lastItemIndex = currentPage*itemPerPage;
   const firstItemIndex = lastItemIndex - itemPerPage;
   let newCards = cards.slice(firstItemIndex,lastItemIndex);
   
-  
-  
   const handleCancel = () => {
     setIsModalDeleteOpen(false);
   };
+  useEffect(() => {
+    if(cardSearchValue) {
+      setItemPerPage(newCards.length);
+    }
+  },[cardSearchValue, newCards])
   if(cardSearchValue) {
     newCards = cards?.filter((card: { name: string; }) => {
       {
@@ -43,11 +46,11 @@ function ListCard(props:Props) {
     setCards(cards);
     setIsModalDeleteOpen(false);
     setIsDelete(true);
-    console.log(cardId);
   }
+  console.log(isSearchEmpty,`Item per page: ${itemPerPage}`)
   return (
     <div className="wrapper">
-      {newCards.length!==0?<Row gutter={16}>
+      {newCards.length!==0?isSearchEmpty===true?<Row gutter={16}>
         {newCards?.map((card: { name: string; description: string; imgUrl: string; like: number; comments: object[]; id: number; },index: number) => {
           return <Col span={12} key={index}>
           <CustomCard
@@ -75,8 +78,8 @@ function ListCard(props:Props) {
               } } isCurrentPageChange={false} itemPerPage={0} currentPage={0} isChangeInput={false} searchInputValue={""} isClickCardDetail={false} isModalEditOpen={false} isClickInput={false}          />
         </Col>
         })}
-      </Row>:<NotFound/>}
-      {cards.length>=10?isSearchMatch===false?<CustomPagination setIsCurrentPageChange={setIsCurrentPageChange} isCurrentPageChange={isCurrentPageChange} itemPerPage={itemPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} isModalAddOpen={false} setIsModalAddOpen={function (): void {
+      </Row>:<NotFound/>:<NotFound/>}
+      {itemPerPage===10?isSearchEmpty===true?<CustomPagination setIsCurrentPageChange={setIsCurrentPageChange} isCurrentPageChange={isCurrentPageChange} itemPerPage={itemPerPage} setCurrentPage={setCurrentPage} currentPage={currentPage} isModalAddOpen={false} setIsModalAddOpen={function (): void {
         throw new Error("Function not implemented.");
       } } isModalDeleteOpen={false} setIsModalDeleteOpen={function (): void {
         throw new Error("Function not implemented.");
